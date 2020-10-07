@@ -2,9 +2,7 @@ const colors = require("vuetify/es5/util/colors").default;
 
 module.exports = {
   //在github pages中部署网站步骤：运行 yarn generate。将dist目录改名为docs。提交代码即可
-  router: {
-    base: "/EasyManagement/", //这是为了在github pages中部署网站。
-  },
+
   server: {
     port: 3000, // default: 3000
     // host: "0.0.0.0", // default: localhost
