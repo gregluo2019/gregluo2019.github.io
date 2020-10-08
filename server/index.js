@@ -10,15 +10,6 @@ app.use(bodyParser.urlencoded({ limit: "10mb", extended: true })); // handle URL
 app.set("trust proxy", true);
 
 //https://github.com/mysqljs/mysql
-var mysql = require("mysql");
-//https://github.com/mysqljs/mysql#pooling-connections
-var conn = mysql.createPool({
-  connectionLimit: 10,
-  host: "localhost",
-  user: "root",
-  password: "Chen2Luo!!",
-  database: "management",
-});
 
 // Import and Set Nuxt.js options
 const config = require("../nuxt.config.js");
@@ -38,9 +29,6 @@ async function start() {
     const builder = new Builder(nuxt);
     await builder.build();
   }
-
-  /////////////////////
-  require("./file/file")(app);
 
   /////////////////////
 

@@ -111,25 +111,70 @@ export default {
       setInfoMessage: "projects/setInfoMessage",
       setErrorMessage: "projects/setErrorMessage",
     }),
-    ...mapActions({
-      sendEmail: "projects/sendEmail",
-    }),
 
     sendingEmail() {
       this.loading = true;
-      let subject = this.subject;
       let msg = `Name: ${this.name}.<br>Phone: ${this.phone}.<br>From: ${this.emailFrom}.<br>Content: ${this.content}`;
 
-      let params = {
-        email: "greg.luo@outlook.com", //"greg.luo@outlook.com", //
-        subject,
-        msg,
+      /* SmtpJS.com - v3.0.0 */
+      var Email = {
+        send: function (a) {
+          return new Promise(function (n, e) {
+            (a.nocache = Math.floor(1e6 * Math.random() + 1)),
+              (a.Action = "Send");
+            var t = JSON.stringify(a);
+            Email.ajaxPost("https://smtpjs.com/v3/smtpjs.aspx?", t, function (
+              e
+            ) {
+              n(e);
+            });
+          });
+        },
+        ajaxPost: function (e, n, t) {
+          var a = Email.createCORSRequest("POST", e);
+          a.setRequestHeader(
+            "Content-type",
+            "application/x-www-form-urlencoded"
+          ),
+            (a.onload = function () {
+              var e = a.responseText;
+              null != t && t(e);
+            }),
+            a.send(n);
+        },
+        ajax: function (e, n) {
+          var t = Email.createCORSRequest("GET", e);
+          (t.onload = function () {
+            var e = t.responseText;
+            null != n && n(e);
+          }),
+            t.send();
+        },
+        createCORSRequest: function (e, n) {
+          var t = new XMLHttpRequest();
+          return (
+            "withCredentials" in t
+              ? t.open(e, n, !0)
+              : "undefined" != typeof XDomainRequest
+              ? (t = new XDomainRequest()).open(e, n)
+              : (t = null),
+            t
+          );
+        },
       };
-
-      this.sendEmail(params)
-        .then((res) => {
-          this.setInfoMessage(res.data ? res.data : res.toString());
-          this.$emit("hideDialog");
+      Email.send({
+        Host: "smtp.qq.com",
+        Username: "550285995",
+        Password: "akoervokshzcbdad",
+        To: "greg.luo@outlook.com",
+        From: "550285995@qq.com",
+        Subject: this.subject,
+        Body: msg,
+      })
+        .then(() => {
+          this.setInfoMessage(
+            "Email sent successfully. We will contact you shortly."
+          );
         })
         .catch((e) => {
           this.setErrorMessage(e.response ? e.response.data : e.message);

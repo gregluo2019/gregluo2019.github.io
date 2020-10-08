@@ -1,9 +1,6 @@
 import moment from "moment";
 
 export default {
-  setFileList(state, fileList) {
-    state.fileList = fileList.sort();
-  },
   setWindowSize(state, windowSize) {
     state.windowSize = windowSize;
   },
